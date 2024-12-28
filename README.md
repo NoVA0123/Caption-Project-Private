@@ -30,7 +30,7 @@ Model Specification:
 
 - Sequence Length = 128
 - Token Dimension(dmodel) = 384
-- Image size (after transformation) = 240 x 224
+- Image size (after transformation) = 256 x 224
 - Number of Decoder Layers = 3
 - Num of Decoder Heads = 12
 - Batch Size = 64
