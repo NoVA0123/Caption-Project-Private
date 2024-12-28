@@ -20,7 +20,8 @@ pip install -r requirements.txt
 
 
 This Model uses pretrained EfficientNet5 for feature extraction and GPT-2 architecture (from scratch) is used as decoder.
-Note: This is not a proper working model because it is trained on 11264 steps rather than 20k - 90k steps. "validation_output.txt" have results of training. Each line displays an output for each step.
+
+Note: This is not a proper working model because it is trained on 16384 steps rather than 20k - 90k steps. "validation_output.txt" have results of training. Each line displays an output for each step.
 
 
 
