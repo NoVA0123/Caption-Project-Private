@@ -19,6 +19,7 @@
         "tokenizer_load_path": "/kaggle/working/Caption-and-Detection/tokenizer.json"
     },
     "transformer_config":{
+        "continue": 1,
         "model_name": "gpt-2",
         "block_size": 128,
         "vocab_size": 30080,
@@ -27,6 +28,7 @@
         "d_model": 384 
     },
     "model_config":{
+        "existing_path": "/kaggle/input/captionmodel-stage-1/pytorch/default/1/caption_model.pt",
         "batch_size": 64,
         "epochs": 16,
         "dtype": "fp16",
@@ -34,7 +36,7 @@
             "max_lr": 6e-4,
             "warmup_steps": 10,
             "max_steps": 500,
-            "test": 0
+            "test": 1
         }
     },
     "dataset_config": {

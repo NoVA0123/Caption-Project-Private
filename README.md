@@ -47,7 +47,7 @@ Features used to speed up training:
 - Fused Adam
 - FP16
 
-![Model result after 16k steps](relative%20path/to/test.jpg?raw=true)
+![Model result after 16k steps](relative%20path/to/Test.jpg?raw=true)
 
 
 # For Full training check this link

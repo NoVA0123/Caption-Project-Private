@@ -7,6 +7,7 @@ from torch.nn import functional as F
 from torch.utils.data import DataLoader
 from torch.utils.data.distributed import DistributedSampler
 from torch.utils.tensorboard import SummaryWriter
+from tokenizers import Tokenizer
 import json
 from tqdm.auto import tqdm
 from argparse import ArgumentParser
@@ -153,6 +154,7 @@ def train(rank:int,
     NumLayers = TrConf['number_layers']
     NumHeads = TrConf['number_heads']
     DModel = TrConf['d_model']
+    ContinueTheWork = TrConf['continue']
 
     # Sample Size
     TotalSamples = data['dataset_config']['max_sample']
@@ -162,6 +164,7 @@ def train(rank:int,
     BatchSize = ModelConfig['batch_size']
     Epochs = ModelConfig['epochs']
     ModelDtype = ModelConfig['dtype']
+    ModelPath = ModelConfig['existing_path']
 
     bf16 = False
     fp16 = False
@@ -178,11 +181,15 @@ def train(rank:int,
 
 
     # Creating a tokenizer
-    if data['tokenizer_config']['tokenizer_save_path'] is null:
-        tokenizer = get_tokenizer(TrainData)
+    if ContinueTheWork == 0:
+        if data['tokenizer_config']['tokenizer_save_path'] is null:
+            tokenizer = get_tokenizer(TrainData)
+        else:
+            tokenizer = get_tokenizer(TrainData,
+                                      data['tokenizer_config']['tokenizer_path'])
     else:
-        tokenizer = get_tokenizer(TrainData,
-                                  data['tokenizer_config']['tokenizer_path'])
+        tokenizer = Tokenizer.from_file(
+                data['tokenizer_config']['tokenizer_load_path'])
 
 
     # Creating fast tokenizer
@@ -260,6 +267,13 @@ def train(rank:int,
         model = llama_transformer(config,
                                   CnnModel=efficientb0,
                                   device=device)
+    if ContinueTheWork:
+        # Loading checkpoint
+        checkpoint = torch.load(ModelPath)
+        state_dict = checkpoint['model_state_dict']
+        for key in list(state_dict.keys()):
+            state_dict[key.replace("module._orig_mod.", "")] = state_dict.pop(key)
+        model.load_state_dict(state_dict)
     model.to(device) 
 
     # To compile model and make model faster
@@ -310,6 +324,8 @@ def train(rank:int,
     optimizer = raw_model.configure_optimizers(WeightDecay=0.1,
                                            LearningRate=6e-4,
                                            device=device_type)
+    if ContinueTheWork:
+        optimizer = optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
 
 
     # Creating gradient accumulation step to increase batch size
@@ -325,8 +341,16 @@ def train(rank:int,
 
     # Training
     TimeTaken = 0
-    GlobalSteps = 0
-    for i in tqdm(range(Epochs)):
+    if ContinueTheWork:
+        GlobalSteps = checkpoint['global_step']
+        StartEpochs = checkpoint['epoch']
+        EndEpochs = StartEpoch + Epochs
+    else:
+        GlobalSteps = 0
+        StartEpochs = 0
+        EndEpochs = StartEpoch + Epochs
+
+    for i in tqdm(range(StartEpochs, EndEpochs)):
         IterImgData = iter(ImgData)
         IterCapData = iter(CaptionData)
 
@@ -445,7 +469,7 @@ def train(rank:int,
             elif rank == 0:
                 print(f"Epoch: {i} | Steps: {LocalSteps} | loss: {LossAccum.item(): .2f} | lr: {lr: .5e} |Process time: {dt*1000:.2f}ms | tok/sec: {TokensPerSec:.2f}")'''
             if rank == 0:
-                print(f"Epoch: {i} | Steps: {LocalSteps} | loss: {Lossf: .2f} | lr: {lr: .5e} | Process time: {dt*1000:.2f}ms | tok/sec: {TokensPerSec:.2f}")
+                print(f"Epoch: {i+1} | Steps: {LocalSteps+1} | loss: {Lossf: .2f} | lr: {lr: .5e} | Process time: {dt*1000:.2f}ms | tok/sec: {TokensPerSec:.2f}")
 
             writer.add_scalar('Training Loss', Lossf, global_step=GlobalSteps)
             writer.add_scalar('Training Time Per Step', dt * 1000, global_step=GlobalSteps)

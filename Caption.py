@@ -15,16 +15,15 @@ from base_files.cnn_model_files.cnn_model import get_cnn_model
 
 
 @torch.no_grad()
-def CaptionGenerator(ModelName:str,
-                     JsonPath:str,
+def CaptionGenerator(JsonPath:str,
                      ImgPath: str,
-                     ModelPath: str,
                      TokenSize: str,
-                     Temprature=1.0,
-                     Topk=None):
+                     Temprature: str = '1.0',
+                     Topk: str = '100',
+                     SpecialPath = None):
 
     TokenSize = int(TokenSize)
-    Topk = int(Topk) if Topk is not None else None
+    Topk = int(Topk)
     Temprature = float(Temprature)
     device = 'cpu'
 
@@ -45,6 +44,12 @@ def CaptionGenerator(ModelName:str,
     # Importing json file
     with open (JsonPath, 'r') as f:
         data = json.load(f)
+
+    if SpecialPath is None:
+        ModelPath = data['model_config']['existing_path']
+    else:
+        ModelPath = SpecialPath
+    ModelName = data['transformer_config']['model_name']
 
     # Importing tokenizer
     TokenizerPath = data["tokenizer_config"]['tokenizer_load_path']
@@ -178,10 +183,25 @@ def CaptionGenerator(ModelName:str,
 # Argument parser
 def command_line_argument():
     parser = ArgumentParser()
-    parser.add_argument('--args', dest='Args', action='append')
+    parser.add_argument('--jpath', dest='JsonPath', help='Inserts json path inside program')
+    parser.add_argument('--ipath', dest='ImgPath', help='Inserts image Path inside program')
+    parser.add_argument('--size', dest='Size', help='Manual token size for the model')
+    parser.add_argument('--temp', dest='Temprature', help='Adjust the temprature of the model')
+    parser.add_argument('--topk', dest='TopK', help='Random tokens will picked from top K tokens')
+    parser.add_argument('--mpath', dest='ModelPath', help='Inserts model path inside program')
     return parser.parse_args()
 
 if __name__ == '__main__':
     Args = command_line_argument()
-    Args = Args.Args
-    decoded = CaptionGenerator(*Args)
+    jpath = Args.jpath
+    ipath = Args.ipath
+    mpath = Args.mpath
+    size = Args.size
+    temp= Args.temp
+    topk = Args.topk
+    decoded = CaptionGenerator(jpath,
+                               ipath,
+                               size,
+                               temp,
+                               topk,
+                               mpath)
