@@ -344,11 +344,11 @@ def train(rank:int,
     if ContinueTheWork:
         GlobalSteps = checkpoint['global_step']
         StartEpochs = checkpoint['epoch']
-        EndEpochs = StartEpoch + Epochs
+        EndEpochs = StartEpochs + Epochs
     else:
         GlobalSteps = 0
         StartEpochs = 0
-        EndEpochs = StartEpoch + Epochs
+        EndEpochs = StartEpochs + Epochs
 
     for i in tqdm(range(StartEpochs, EndEpochs)):
         IterImgData = iter(ImgData)
