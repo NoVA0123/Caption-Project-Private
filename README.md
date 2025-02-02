@@ -47,3 +47,8 @@ Features used to speed up training:
 - Fused Adam
 - FP16
 
+![Model result after 16k steps](relative%20path/to/test.jpg?raw=true)
+
+
+# For Full training check this link
+[Project NoteBook](https://www.kaggle.com/code/abhijitrai/caption-project)
