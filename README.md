@@ -14,6 +14,7 @@ pip install -r requirements.txt
 - Pillow
 
 ![Model result after 16k steps](https://github.com/NoVA0123/Caption-Project/blob/main/Test.JPG)
+Note: The list represents Token ID's.
 
 
 # For Full training check this link
