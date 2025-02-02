@@ -47,7 +47,7 @@ Features used to speed up training:
 - Fused Adam
 - FP16
 
-![Model result after 16k steps](relative%20path/to/test.jpg?raw=true)
+![Model result after 16k steps](https://github.com/NoVA0123/Caption-Project/blob/main/Test.JPG)
 
 
 # For Full training check this link
