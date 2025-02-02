@@ -1,5 +1,4 @@
-# Caption
-
+# Caption Project
 
 Requirements:
 
@@ -14,7 +13,18 @@ pip install -r requirements.txt
 - Numpy            1.26.4
 - Pillow
 
+![Model result after 16k steps](https://github.com/NoVA0123/Caption-Project/blob/main/Test.JPG)
+Note: The list represents Token ID's.
 
+
+# For Full training check this link
+[Project NoteBook](https://www.kaggle.com/code/abhijitrai/caption-project)
+
+
+# Test the model here
+[Huggingface Link](https://huggingface.co/spaces/N0v4123/Caption-Model)
+
+Note: This might not work efficiently as it is trained on T4 GPU but runs on CPU
 
 # Model Description
 
@@ -46,9 +56,3 @@ Features used to speed up training:
 - Torch Compile
 - Fused Adam
 - FP16
-
-![Model result after 16k steps](relative%20path/to/Test.jpg?raw=true)
-
-
-# For Full training check this link
-[Project NoteBook](https://www.kaggle.com/code/abhijitrai/caption-project)
