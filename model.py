@@ -273,6 +273,8 @@ def train(rank:int,
     if model == 'gpt-2' or DModel == 384:
         model = torch.compile(model)
 
+    if ContinueTheWork:
+        checkpoint = torch.load(ModelPath)
 
     # Adding grad scaler for mixed precision
     if device_type == 'cuda' and fp16:
@@ -321,7 +323,6 @@ def train(rank:int,
                                            device=device_type)
     if ContinueTheWork:
         # Loading checkpoint
-        checkpoint = torch.load(ModelPath)
         state_dict = checkpoint['model_state_dict']
         for key in list(state_dict.keys()):
             state_dict[key.replace("module._orig_mod.", "")] = state_dict.pop(key)
