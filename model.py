@@ -267,13 +267,6 @@ def train(rank:int,
         model = llama_transformer(config,
                                   CnnModel=efficientb0,
                                   device=device)
-    if ContinueTheWork:
-        # Loading checkpoint
-        checkpoint = torch.load(ModelPath)
-        state_dict = checkpoint['model_state_dict']
-        for key in list(state_dict.keys()):
-            state_dict[key.replace("module._orig_mod.", "")] = state_dict.pop(key)
-        model.load_state_dict(state_dict)
     model.to(device) 
 
     # To compile model and make model faster
@@ -326,8 +319,13 @@ def train(rank:int,
     optimizer = raw_model.configure_optimizers(WeightDecay=0.1,
                                            LearningRate=6e-4,
                                            device=device_type)
-    print(optimizer.param_groups)
     if ContinueTheWork:
+        # Loading checkpoint
+        checkpoint = torch.load(ModelPath)
+        state_dict = checkpoint['model_state_dict']
+        for key in list(state_dict.keys()):
+            state_dict[key.replace("module._orig_mod.", "")] = state_dict.pop(key)
+        model.load_state_dict(state_dict)
         optimizer = optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
     print(optimizer.param_groups)
 
