@@ -267,14 +267,19 @@ def train(rank:int,
         model = llama_transformer(config,
                                   CnnModel=efficientb0,
                                   device=device)
+    if ContinueTheWork:
+        checkpoint = torch.load(ModelPath)
+        state_dict = checkpoint['model_state_dict']
+        for key in list(state_dict.keys()):
+            state_dict[key.replace("module._orig_mod.", "")] = state_dict.pop(key)
+        model.load_state_dict(state_dict)
+
     model.to(device) 
 
     # To compile model and make model faster
     if model == 'gpt-2' or DModel == 384:
         model = torch.compile(model)
 
-    if ContinueTheWork:
-        checkpoint = torch.load(ModelPath)
 
     # Adding grad scaler for mixed precision
     if device_type == 'cuda' and fp16:
@@ -323,8 +328,6 @@ def train(rank:int,
                                            device=device_type)
     if ContinueTheWork:
         # Loading checkpoint
-        state_dict = checkpoint['model_state_dict']
-        model.load_state_dict(state_dict)
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
 
 
