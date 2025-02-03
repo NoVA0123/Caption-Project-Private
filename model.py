@@ -326,7 +326,6 @@ def train(rank:int,
         state_dict = checkpoint['model_state_dict']
         model.load_state_dict(state_dict)
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-    print(optimizer.param_groups)
 
 
     # Creating gradient accumulation step to increase batch size
