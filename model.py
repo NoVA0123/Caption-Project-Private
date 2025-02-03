@@ -325,7 +325,7 @@ def train(rank:int,
         # Loading checkpoint
         state_dict = checkpoint['model_state_dict']
         model.load_state_dict(state_dict)
-        optimizer = optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
     print(optimizer.param_groups)
 
 
