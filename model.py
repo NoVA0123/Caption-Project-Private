@@ -487,9 +487,6 @@ def train(rank:int,
                                           WrappedTokenizer,
                                           model,
                                           MaxLen)
-                with open("validation_output.txt", 'a') as f:
-                    f.write(cap_text + "\n")
-
     writer.close()
     
 
