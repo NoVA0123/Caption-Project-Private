@@ -193,12 +193,12 @@ def command_line_argument():
 
 if __name__ == '__main__':
     Args = command_line_argument()
-    jpath = Args.jpath
-    ipath = Args.ipath
-    mpath = Args.mpath
-    size = Args.size
-    temp= Args.temp
-    topk = Args.topk
+    jpath = Args.JsonPath
+    ipath = Args.ImgPath
+    mpath = Args.ModelPath
+    size = Args.Size
+    temp= Args.Temprature
+    topk = Args.TopK
     decoded = CaptionGenerator(jpath,
                                ipath,
                                size,
