@@ -326,8 +326,10 @@ def train(rank:int,
     optimizer = raw_model.configure_optimizers(WeightDecay=0.1,
                                            LearningRate=6e-4,
                                            device=device_type)
+    print(optimizer.param_groups)
     if ContinueTheWork:
         optimizer = optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+    print(optimizer.param_groups)
 
 
     # Creating gradient accumulation step to increase batch size
