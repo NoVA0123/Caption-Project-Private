@@ -16,7 +16,7 @@
     },
     "tokenizer_config":{
         "tokenizer_save_path": null,
-        "tokenizer_load_path": "/kaggle/working/Caption-and-Detection/tokenizer.json"
+        "tokenizer_load_path": "/kaggle/working/Caption-Project-Private/tokenizer.json"
     },
     "transformer_config":{
         "continue": 1,
