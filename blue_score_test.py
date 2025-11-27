@@ -191,7 +191,7 @@ with open ("/kaggle/working/Caption-Project-Private/config.json", 'r') as f:
     JsonData = json.load(f)
 FilePath = JsonData["file_path"]
 Data = caption_extracter(FilePath["json_path"]["validation_json"],
-                         FilePath["image_path"]["validation_image_path"])
+                         FilePath["image_path"]["validation_path"])
 
 Predictions = []
 Refrences = Data["caption"].tolist()
