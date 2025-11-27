@@ -182,12 +182,12 @@ def CaptionGenerator(JsonPath:str,
     return Decoded
 
 
-JsonPath = "config.json"
+JsonPath = "/kaggle/working/Caption-Project-Private/config.json"
 TokenSize = 128
 Temprature = "0.48"
 TopK = "100"
 
-with open ("/kaggle/working/Caption-Project-Private/config.json", 'r') as f:
+with open (JsonPath, 'r') as f:
     JsonData = json.load(f)
 FilePath = JsonData["file_path"]
 Data = caption_extracter(FilePath["json_path"]["validation_json"],
