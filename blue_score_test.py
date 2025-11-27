@@ -194,9 +194,9 @@ Data = caption_extracter(FilePath["json_path"]["validation_json"],
                          FilePath["image_path"]["validation_path"])
 
 Predictions = []
-Refrences = Data["caption"].tolist()
+Refrences = Data["caption"].tolist()[:1000]
 
-for x in range(len(Data)):
+for x in range(len(Data), 1000):
     CaptionString = CaptionGenerator(JsonPath, Data["image_path"].iloc[x],
                                      TokenSize, Temprature, TopK)
     Predictions.append(CaptionString.split())
